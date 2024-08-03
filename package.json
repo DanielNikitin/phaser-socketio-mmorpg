@@ -1,0 +1,19 @@
+{
+  "name": "phaser-snow",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "build": "build",
+    "preview": "preview"
+  },
+  "dependencies": {
+    "excalibur": "^0.29.3",
+    "express": "^4.19.2",
+    "micro": "^10.0.1",
+    "node": "^20.16.0",
+    "nodemon": "^3.1.4",
+    "socket.io": "^4.7.5",
+    "tmx-parser": "^1.5.0"
+  }
+}

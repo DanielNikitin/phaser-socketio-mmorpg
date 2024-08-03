@@ -1,0 +1,15 @@
+npm install micro
+
+npm run dev for server
+
+// phaser map from server, level changer
+https://dev.to/jorbascrumps/loading-server-generated-tilemaps-with-phaser-4mm7
+
+// death effect
+https://dev.to/jorbascrumps/creating-spelunky-style-level-transitions-in-phaser-2ajd
+
+// how to make mmo rpg phaser
+
+https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-1/?a=13
+https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-2/?a=13
+https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-3/?a=13
