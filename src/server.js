@@ -29,9 +29,6 @@ async function Main() {
       id: socket.id,
       x: Math.floor(Math.random() * 100) + 50,
       y: Math.floor(Math.random() * 200) + 50,
-      spriteKey: "test",
-      hp: 1,
-      speed: 10,
     };
 
     socket.emit("currentPlayers", players);

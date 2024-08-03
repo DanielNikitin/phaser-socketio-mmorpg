@@ -202,6 +202,7 @@ class BootScene extends Phaser.Scene {
         // limit camera to map
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.container); // follow player
+        this.cameras.main.setZoom(1.5); // Увеличение в 2 раза
         this.cameras.main.roundPixels = true; // avoid tile bleed
       }
 
@@ -255,7 +256,12 @@ const config = {
             debug: true
         }
     },
-    scene: [BootScene]
+    scene: [BootScene],
+    fps: {
+        target: 60, // Целевое количество кадров в секунду
+        min: 30,    // Минимальное количество кадров в секунду
+        forceSetTimeOut: false // Опционально, чтобы гарантировать поддержку заданного FPS
+    }
 };
 
 const game = new Phaser.Game(config);
