@@ -13,3 +13,19 @@ https://dev.to/jorbascrumps/creating-spelunky-style-level-transitions-in-phaser-
 https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-1/?a=13
 https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-2/?a=13
 https://gamedevacademy.org/how-to-create-a-phaser-3-mmorpg-part-3/?a=13
+
+
+
+textures:
+
+characters
+tileset 52x52
+https://sagak-art-pururu.itch.io/24pxminicharacters
+mouse
+https://ikoiku.itch.io/16-x-16-pixel-art-character-mouse
+
+
+  // update(time, delta)
+  // 1000 ms / 240hz = delta 4,16 (re-render every 4ms)
+  // 1000 ms / 120hz = delta 8,33
+  // 1000 ms / 60hz = delta 16,66

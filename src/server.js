@@ -15,7 +15,7 @@ const io = new Server(httpServer, {
   }
 });
 
-const players = {};
+let players = {};
 
 ////// MAIN
 async function Main() {
@@ -31,21 +31,14 @@ async function Main() {
       y: Math.floor(Math.random() * 200) + 50,
     };
 
-    socket.emit("currentPlayers", players);
-    console.log('players after connect: ', players);
-    socket.broadcast.emit("newPlayer", players[socket.id]);
-
-    // when a player disconnects, remove them from our players object
-    socket.on('disconnect', () => {
-      console.log('user disconnected: ', socket.id);
-      delete players[socket.id];
-      // emit a message to all players to remove this player
-      io.emit('playerDisconnected', socket.id); // изменено с 'disconnect' на 'playerDisconnected'
-      console.log('players after disconnect: ', players);
+    socket.on('inputs', (inputs) => {
+      console.log(socket.id, inputs);
     });
 
+    
   });
 
+  
 ////// EXPRESS STATIC 
 const path = require('path');
 

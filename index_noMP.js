@@ -1,5 +1,4 @@
-import { SIZES, SPRITES } from "./Assets/Constants.js";
-import { Player } from "./Assets/Player/Player.js";
+import { SIZES, SPRITES } from "./Assets/constants";
 
 class BootScene extends Phaser.Scene {
   constructor() {
@@ -34,13 +33,11 @@ class BootScene extends Phaser.Scene {
 
       this.createPlayer();
 
+      // create player animations
+      this.createAnimations();
+
       // user input
       this.cursors = this.input.keyboard.createCursorKeys();
-
-      // Add keydown event listener
-      this.input.keyboard.on('keydown', (event) => {
-        //console.log(`Key pressed: ${event.key}`);
-      });
   }
 
   createMap() {
@@ -63,50 +60,78 @@ class BootScene extends Phaser.Scene {
 
   createPlayer() {
     const playerInfo = {
-        x: 20,
-        y: 20
-    };
+      x: 20,
+      y: 20
+  };
   
-    // Создаем игрока
-    this.player = new Player(this, playerInfo.x, playerInfo.y, SPRITES.PLAYER);
+    this.player = this.add.sprite(playerInfo.x, playerInfo.y, 'player', 0);
 
     // Создаем контейнер и добавляем в него спрайт игрока
     this.container = this.add.container(playerInfo.x, playerInfo.y);
-    this.container.add(this.player);
 
-    // Включаем физику для игрока
-    this.physics.world.enable(this.player);
+    // Устанавливаем размер коллизии контейнера
+    this.container.setSize(14, 20);
 
-    // Устанавливаем размеры и смещение коллайдерного ящика
-    this.player.body.setSize(14, 20);
-    
-    // Настроить столкновение с границами мира
-    this.player.body.setCollideWorldBounds(true);
+    // Включаем физику для контейнера
+    this.physics.world.enable(this.container);
 
     // Обновляем камеру
     this.updateCamera();
-  }
 
+    // Настроить столкновение с границами мира
+    this.container.body.setCollideWorldBounds(true);
+}
+
+
+  createAnimations() {
+      this.anims.create({
+          key: 'left',
+          frames: this.anims.generateFrameNumbers('player', {
+              frames: [25, 26, 27, 28]
+          }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'right',
+          frames: this.anims.generateFrameNumbers('player', {
+              frames: [9, 10, 11, 12]
+          }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'up',
+          frames: this.anims.generateFrameNumbers('player', {
+              frames: [17, 18, 19, 20]
+          }),
+          frameRate: 10,
+          repeat: -1
+      });
+
+      this.anims.create({
+          key: 'down',
+          frames: this.anims.generateFrameNumbers('player', {
+              frames: [0, 1, 2, 3]
+          }),
+          frameRate: 10,
+          repeat: -1
+      });
+  }
 
   updateCamera() {
       // limit camera to map
       this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-      this.cameras.main.startFollow(this.player); // follow player
-      this.cameras.main.setZoom(3); // Увеличение в 2 раза
+      this.cameras.main.startFollow(this.container); // follow player
+      this.cameras.main.setZoom(2); // Увеличение в 2 раза
       this.cameras.main.roundPixels = true; // avoid tile bleed
   }
 
-  update(time, delta) {
-    if (this.player) {
-        this.player.update(delta);
+  update() {
 
-        // Получаем состояние клавиш и выводим в консоль
-        const inputs = this.player.getInputs();
-        // Отправляем состояние клавиш на сервер
-        this.socket.emit('inputs', inputs);
-    }
-}
-
+  }
 }
 
 const config = {
