@@ -2,52 +2,50 @@ import { Entity } from "../Entity.js";
 import { SPRITES } from "../Constants.js";
 
 export class Player extends Entity {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, speed) {
         super(scene, x, y, SPRITES.PLAYER);
-        this.speed = 50; // Скорость в пикселях в секунду
-
+        
         const anims = this.scene.anims;
         const animsFrameRate = 10;
         this.textureKey = SPRITES.PLAYER;
+        this.speed = speed;
 
-        anims.create({
-            key: 'left',
-            frames: anims.generateFrameNumbers(this.textureKey, {
-                start: 25, end: 28
-            }),
-            frameRate: animsFrameRate,
-            repeat: -1
-        });
+        // Проверка и создание анимаций только если их еще нет
+        if (!anims.get('left')) {
+            anims.create({
+                key: 'left',
+                frames: anims.generateFrameNumbers(this.textureKey, { start: 25, end: 28 }),
+                frameRate: animsFrameRate,
+                repeat: -1
+            });
+        }
 
-        anims.create({
-            key: 'right',
-            frames: anims.generateFrameNumbers(this.textureKey, {
-                start: 9,
-                end: 12
-            }),
-            frameRate: animsFrameRate,
-            repeat: -1
-        });
+        if (!anims.get('right')) {
+            anims.create({
+                key: 'right',
+                frames: anims.generateFrameNumbers(this.textureKey, { start: 9, end: 12 }),
+                frameRate: animsFrameRate,
+                repeat: -1
+            });
+        }
 
-        anims.create({
-            key: 'up',
-            frames: anims.generateFrameNumbers(this.textureKey, {
-                start: 17,
-                end: 20
-            }),
-            frameRate: animsFrameRate,
-            repeat: -1
-        });
+        if (!anims.get('up')) {
+            anims.create({
+                key: 'up',
+                frames: anims.generateFrameNumbers(this.textureKey, { start: 17, end: 20 }),
+                frameRate: animsFrameRate,
+                repeat: -1
+            });
+        }
 
-        anims.create({
-            key: 'down',
-            frames: anims.generateFrameNumbers(this.textureKey, {
-                start: 0,
-                end: 3
-            }),
-            frameRate: animsFrameRate,
-            repeat: -1
-        });
+        if (!anims.get('down')) {
+            anims.create({
+                key: 'down',
+                frames: anims.generateFrameNumbers(this.textureKey, { start: 0, end: 3 }),
+                frameRate: animsFrameRate,
+                repeat: -1
+            });
+        }
 
         this.inputs = {
             up: false,
@@ -57,66 +55,27 @@ export class Player extends Entity {
         };
     }
 
-    update(delta) {
-        const cursors = this.scene.input.keyboard.createCursorKeys();
-
-        let velocityX = 0;
-        let velocityY = 0;
-
-        // UP
-        if (cursors.up.isDown) {
-            velocityY = -this.speed;
-            this.play('up', true);
-            this.inputs["up"] = true;
+    update(time, delta) {
+        // Обработка анимаций и движения
+        const anims = this.scene.anims;
+    
+        if (this.inputs.up) {
+          this.play('up', true);
+          this.y -= this.speed;
+        } else if (this.inputs.down) {
+          this.play('down', true);
+          this.y += this.speed;
+        } else if (this.inputs.left) {
+          this.play('left', true);
+          this.x -= this.speed;
+        } else if (this.inputs.right) {
+          this.play('right', true);
+          this.x += this.speed;
         } else {
-            this.inputs["up"] = false;
-        }
-
-        // DOWN
-        if (cursors.down.isDown) {
-            velocityY = this.speed;
-            this.play('down', true);
-            this.inputs["down"] = true;
-        } else {
-            this.inputs["down"] = false;
-        }
-
-        // LEFT
-        if (cursors.left.isDown) {
-            velocityX = -this.speed;
-            this.play('left', true);
-            this.inputs["left"] = true;
-        } else {
-            this.inputs["left"] = false;
-        }
-
-        // RIGHT
-        if (cursors.right.isDown) {
-            velocityX = this.speed;
-            this.play('right', true);
-            this.inputs["right"] = true;
-        } else {
-            this.inputs["right"] = false;
-        }
-
-        // Нормализация скорости для диагонального движения
-        const length = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        if (length > 0) {
-            velocityX /= length;
-            velocityY /= length;
-        }
-
-        // Перемещение игрока с учетом delta времени
-        this.setX(this.x + velocityX * this.speed * (delta / 1000));
-        this.setY(this.y + velocityY * this.speed * (delta / 1000));
-
-        // Остановка анимации, если не нажата ни одна клавиша
-        if (!cursors.left.isDown && !cursors.right.isDown && !cursors.up.isDown && !cursors.down.isDown) {
-            this.stop();
+          this.stop();
         }
     }
 
-    // Метод для получения состояния клавиш
     getInputs() {
         return this.inputs;
     }
